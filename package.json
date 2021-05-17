@@ -1,0 +1,23 @@
+{
+  "name": "use-axios",
+  "version": "1.0.0",
+  "description": "Source code and demo for a generic Axios call React Hook.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kwhitejr/use-axios.git"
+  },
+  "keywords": [],
+  "author": "Kevin White",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kwhitejr/use-axios/issues"
+  },
+  "homepage": "https://github.com/kwhitejr/use-axios#readme",
+  "dependencies": {
+    "axios": "^0.21.1"
+  }
+}
