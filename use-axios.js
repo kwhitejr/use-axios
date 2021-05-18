@@ -1,40 +1,40 @@
-import { useState, useEffect, useReducer } from "react";
-import axios, { CancelToken, isCancel } from 'axios';
+import React, { useEffect, useReducer } from "react";
+import axios, { CancelToken, isCancel } from "axios";
 
 // Reducer helps manage complex local state.
 const axiosReducer = (state, action) => {
   switch (action.type) {
-    case 'AXIOS_INIT':
+    case "AXIOS_INIT":
       return {
-        ...state,
         isLoading: true,
         isError: false
       };
-    case 'AXIOS_SUCCESS':
+    case "AXIOS_SUCCESS":
       return {
-        ...state,
         isLoading: false,
         isError: false,
-        data: action.payload,
+        response: action.payload
       };
-    case 'AXIOS_FAILURE':
+    case "AXIOS_FAILURE":
       return {
-        ...state,
         isLoading: false,
-        isError: true,
+        isError: true
       };
     default:
       throw new Error();
   }
 };
 
-const useAxios = (url, config, initialData) => {
-  // const [options, setOptions] = useState({ url, config });
-
+/**
+ *
+ * @param {string} url      - The url to call
+ * @param {object} [config] - The axios config object; defaults to GET
+ * @returns {state}         - { isLoading, isError, response }
+ */
+const useAxios = (url, config) => {
   const [state, dispatch] = useReducer(axiosReducer, {
     isLoading: false,
-    isError: false,
-    data: initialData,
+    isError: false
   });
 
   useEffect(() => {
@@ -42,27 +42,33 @@ const useAxios = (url, config, initialData) => {
     let source = CancelToken.source();
 
     const callAxios = async () => {
-      dispatch({ type: 'AXIOS_INIT' });
+      dispatch({ type: "AXIOS_INIT" });
 
       try {
-        const result = await axios(url, { ...config, cancelToken: source.token });
+        const response = await axios(url, {
+          ...config,
+          cancelToken: source.token
+        });
         if (isMounted) {
-          dispatch({ type: 'AXIOS_SUCCESS', payload: result });
+          dispatch({ type: "AXIOS_SUCCESS", payload: response });
         }
       } catch (err) {
         if (!isMounted) return;
-        if (isCancel(err)) return;
-        dispatch({ type: 'AXIOS_FAILURE' });
+        if (isCancel(err)) {
+          console.log("Canceled request.");
+          return;
+        }
+        dispatch({ type: "AXIOS_FAILURE" });
       }
     };
 
     callAxios();
 
     return () => {
-      source.cancel('Operation canceled.');
+      isMounted = false;
+      source.cancel("Operation canceled.");
     };
-
-  }, [url, config]);
+  }, [url]);
 
   return state;
 };

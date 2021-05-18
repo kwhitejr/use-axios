@@ -1,15 +1,20 @@
-import { useState } from 'react';
-import useAxios from "../use-axios";
+import React, { useState } from "react";
+import useAxios from "./use-axios";
 
 const App = () => {
   const [id, setId] = useState("1");
-  const axiosConfig = { method: 'get', timeout: 2500 };
-  const { isLoading, isError, data: pokemon } = useAxios(`https://pokeapi.co/api/v2/pokemon/${id}`, axiosConfig);
+  const axiosConfig = { method: "get", timeout: 2500 };
+  const { isLoading, isError, response } = useAxios(
+    `https://pokeapi.co/api/v2/pokemon/${id}`,
+    axiosConfig
+  );
+
+  const pokemon = response?.data;
 
   const handleChange = (event) => {
     event.preventDefault();
     setId(event.target.value);
-  }
+  };
 
   return (
     <div>
@@ -26,4 +31,6 @@ const App = () => {
       <p>* try valid and invalid ids</p>
     </div>
   );
-}
+};
+
+export default App;
