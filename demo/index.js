@@ -18,6 +18,7 @@ const App = () => {
 
   return (
     <div>
+      <h4>useAxios Demo</h4>
       <h3>Enter Pokemon Id</h3>
       <input type="text" value={id} onChange={handleChange} />
       {pokemon && (
@@ -28,7 +29,8 @@ const App = () => {
       )}
       {isLoading && <p style={{ color: "blue", fontSize: "20px" }}>LOADING</p>}
       {isError && <p style={{ color: "red", fontSize: "20px" }}>ERROR</p>}
-      <p>* try valid and invalid ids</p>
+      <p>* try changing the input id quickly and watch the console and/or network
+        tab</p>
     </div>
   );
 };

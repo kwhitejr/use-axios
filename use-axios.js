@@ -38,8 +38,7 @@ const useAxios = (url, config) => {
   });
 
   useEffect(() => {
-    let isMounted = true;
-    let source = CancelToken.source();
+    const source = CancelToken.source();
 
     const callAxios = async () => {
       dispatch({ type: "AXIOS_INIT" });
@@ -49,11 +48,8 @@ const useAxios = (url, config) => {
           ...config,
           cancelToken: source.token
         });
-        if (isMounted) {
-          dispatch({ type: "AXIOS_SUCCESS", payload: response });
-        }
+        dispatch({ type: "AXIOS_SUCCESS", payload: response });
       } catch (err) {
-        if (!isMounted) return;
         if (isCancel(err)) {
           console.log("Canceled request.");
           return;
@@ -65,7 +61,6 @@ const useAxios = (url, config) => {
     callAxios();
 
     return () => {
-      isMounted = false;
       source.cancel("Operation canceled.");
     };
   }, [url]);
